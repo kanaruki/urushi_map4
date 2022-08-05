@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="col-auto offset-2 mt-5">
+    <h2>マイページ</h2>
+  </div>
+</div>
+<div class="row mt-5">
+  <div class="col-2 offset-3">
+    <h5>プロフィールアイコン</h5>
+  </div>
+  <div class="col-3">
+    <%= attachment_image_tag @end_user, :image, size: "300x200", format: 'jpeg' %>
+  </div>
+</div>
+<div class="row mt-5">
+  <div class="col-2 offset-3">
+    <h5>ニックネーム</h5>
+  </div>
+  <div class="col-3">
+    <%= @end_user.name %>
+  </div>
+</div>
+<div class="row mt-5">
+  <div class="col-2 offset-3">
+    <h5>自己紹介</h5>
+  </div>
+  <div class="col-3">
+    <%= @end_user.introduction %>
+  </div>
+</div>
+
+<div class="row mt-5">
+  <div class="col-2 offset-3">
+    <h5>メールアドレス</h5>
+  </div>
+  <div class="col-3">
+    <%= @end_user.email %>
+  </div>
+</div>
+
+<div class="row mt-5">
+  <div class="col-2 offset-3">
+    <h5>マイページ編集</h5>
+  </div>
+  <div class="col-3">
+    <%= link_to "プロフィール編集", end_users_information_edit_path, class: "btn btn-secondary btn-block" %>
+  </div>
+</div>
