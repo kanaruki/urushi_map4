@@ -1,13 +1,13 @@
 class Publics::GroupsController < ApplicationController
   def new
     @group = Group.new
-    @group.end_users << current_end_user
   end
   def show
     @group = Group.find(params[:id])
   end
 
   def index
+    @end_user_group_all = current_end_user.groups
   end
 
   def edit
@@ -16,6 +16,7 @@ class Publics::GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
     if @group.save
+       @group.end_users << current_end_user
       redirect_to group_path(@group), notice: 'グループを作成しました'
     else
       render:new
