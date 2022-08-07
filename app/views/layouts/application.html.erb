@@ -23,6 +23,9 @@
           <div class="col-auto my-auto">
             <%= link_to "グループ一覧", groups_path, class: "btn btn-secondary btn-block" %>
           </div>
+          <div class="col-auto my-auto">
+            <%= link_to "ログアウト", destroy_end_user_session_path, method: :delete, class: "btn btn-secondary btn-block" %>
+          </div>
 
           <div class="col-auto my-auto mr-5">
             <button type="button" class="btn btn-secondary">未定</button>

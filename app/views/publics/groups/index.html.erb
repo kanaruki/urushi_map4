@@ -37,4 +37,60 @@
   </div>
 </div>
 
+<div class="row">
+  <div class="col-auto offset-2 mt-5">
+    <h2>公開グループ一覧</h2>
+  </div>
+</div>
+
+<div class="row mt-5">
+  <div class="col-8 mx-auto">
+    <table class="table table-bordered border-dark">
+      <thead>
+        <tr>
+          <th class="col-4">グループ名</th>
+          <th class="col-5">グループ紹介</th>
+          <th class="col-3"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% Group.all.each do |group| %>
+          <% if group.is_open == true %>
+            <tr>
+              <td>
+                <%= attachment_image_tag group, :image, size: "30x20", format: 'jpeg' %>  <%= group.name %>
+              </td>
+              <td>
+                <%= group.introduction %>
+              </td>
+              <td>
+                <div class="row">
+                  <div class="col-auto mx-auto">
+                    <% unless group.end_users.include?(current_end_user) %>
+                      <%= form_with model: @group_user, url: groups_add_user_path, method: :POST, local:true do |f| %>
+                        <%= f.hidden_field :group_id, value: group.id %>
+                        <%= f.hidden_field :end_user_id, value: group.id %>
+                        <%= f.submit "グループ参加", class: 'btn btn-primary btn-block' %>
+                      <%end%>
+                    <%else%>
+                      <div class="row">
+                        <div class="col-auto mx-auto">
+                          <%= link_to "詳細", group_path(group), class: "btn btn-primary" %>
+                        </div>
+                      </div>
+                    <%end%>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          <%end%>
+        <%end%>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+
 current_user.groups.each do |group|

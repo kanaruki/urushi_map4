@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_05_055701) do
+ActiveRecord::Schema.define(version: 2022_08_07_035650) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -55,6 +55,21 @@ ActiveRecord::Schema.define(version: 2022_08_05_055701) do
     t.string "image_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_open"
+  end
+
+  create_table "places", force: :cascade do |t|
+    t.integer "end_user_id"
+    t.integer "group_id"
+    t.string "place_name", null: false
+    t.string "address", null: false
+    t.text "introduction", default: "", null: false
+    t.float "latitude", null: false
+    t.float "longitude", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["end_user_id"], name: "index_places_on_end_user_id"
+    t.index ["group_id"], name: "index_places_on_group_id"
   end
 
 end
