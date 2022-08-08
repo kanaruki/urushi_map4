@@ -5,6 +5,8 @@ class Publics::GroupsController < ApplicationController
   def show
     @group = Group.find(params[:id])
     @place = Place.new
+    @place_1 = @group.places.first
+    @place_2 = @group.places.second
   end
 
   def index

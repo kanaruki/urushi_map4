@@ -4,6 +4,7 @@ class CreateGroups < ActiveRecord::Migration[5.2]
       t.string :name, null: false
       t.text :introduction, null: false
       t.string :image_id
+      t.boolean :is_open, null: false, default: false
       t.datetime :created_at, null: false
       t.datetime :updated_at, null: false
       t.timestamps

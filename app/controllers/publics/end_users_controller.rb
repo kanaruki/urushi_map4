@@ -12,7 +12,7 @@ class Publics::EndUsersController < ApplicationController
     @end_user.update(end_user_params)
     redirect_to end_users_mypage_path(@end_user)
   end
-  
+
   def withdrawal
     @customer = Customer.find(current_customer.id)
     @customer.update(is_active: false)
@@ -20,8 +20,10 @@ class Publics::EndUsersController < ApplicationController
     redirect_to root_path
   end
 
+
+
   private
-  
+
   def end_user_params
     params.require(:end_user).permit(:name,:image,:introduction,:email)
   end

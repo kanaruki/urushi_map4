@@ -69,7 +69,7 @@
                     <% unless group.end_users.include?(current_end_user) %>
                       <%= form_with model: @group_user, url: groups_add_user_path, method: :POST, local:true do |f| %>
                         <%= f.hidden_field :group_id, value: group.id %>
-                        <%= f.hidden_field :end_user_id, value: group.id %>
+                        <%= f.hidden_field :end_user_id, value: current_end_user.id %>
                         <%= f.submit "グループ参加", class: 'btn btn-primary btn-block' %>
                       <%end%>
                     <%else%>

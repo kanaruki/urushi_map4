@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :users
   # namespace :publics do
   # end
   devise_for :admins,controllers: {
@@ -13,6 +14,7 @@ Rails.application.routes.draw do
   }
 
   scope module: :publics do
+    resources :places, only: [:create,:destroy]
     patch 'end_users/withdrawal' =>'end_users#withdrawal'
     get 'end_users/mypage' => 'end_users#show'
     get 'end_users/information/edit' => 'end_users#edit'
