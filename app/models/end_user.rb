@@ -10,10 +10,10 @@ class EndUser < ApplicationRecord
   has_many :places
 
   # validates :name, presence: true
-  # # validates :introduction, presence: true
-  # # validates :image_id, presence: true
-  # # validates :is_deleted, presence: true
-  # validates :email, presence: true
+  # validates :introduction, presence: true
+  # validates :image_id, presence: true
+  # validates :is_deleted, presence: true
+  validates :email, presence: true
 
   # before_create :default_image
 

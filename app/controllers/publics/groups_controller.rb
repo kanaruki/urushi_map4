@@ -5,8 +5,8 @@ class Publics::GroupsController < ApplicationController
   def show
     @group = Group.find(params[:id])
     @place = Place.new
-    @place_1 = @group.places.first
-    @place_2 = @group.places.second
+    # @place_1 = @group.places.first
+    # @place_2 = @group.places.second
   end
 
   def index
@@ -19,6 +19,7 @@ class Publics::GroupsController < ApplicationController
 
   def create
     @group = Group.new(group_params)
+    # byebug
     if @group.save
        @group.end_users << current_end_user
       redirect_to group_path(@group), notice: 'グループを作成しました'

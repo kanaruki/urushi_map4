@@ -87,6 +87,8 @@ ActiveRecord::Schema.define(version: 2022_08_08_053209) do
     t.text "introduction", default: "", null: false
     t.float "latitude", null: false
     t.float "longitude", null: false
+    t.string "image_id"
+    t.integer "number", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["end_user_id"], name: "index_places_on_end_user_id"

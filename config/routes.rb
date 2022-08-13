@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :users
   # namespace :publics do
   # end
   devise_for :admins,controllers: {
@@ -14,7 +13,7 @@ Rails.application.routes.draw do
   }
 
   scope module: :publics do
-    resources :places, only: [:create,:destroy]
+    resources :places, only: [:create,:destroy,:show,:edit,:update,:delete]
     patch 'end_users/withdrawal' =>'end_users#withdrawal'
     get 'end_users/mypage' => 'end_users#show'
     get 'end_users/information/edit' => 'end_users#edit'
@@ -24,5 +23,10 @@ Rails.application.routes.draw do
     post 'groups/add_user' => 'groups#add_user'
     # create 'customers/customers/infomation' => 'customers#update'
   end
+
+   namespace :admins do
+     resources :end_users, only: [:index,:show,:edit,:update]
+     resources :groups, only: [:index,:show]
+   end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

@@ -1,11 +1,14 @@
+<% if @place.errors.any? %>
+  <%= @place.errors.count %>件のエラーが発生しました
+  <% @place.errors.full_messages.each do |message| %>
+    <%= message %>
+  <% end %>
+<% end %>
 <div class="row">
   <div class="col-auto offset-2 mt-5">
     <h2><%= @group.name %></h2>
   </div>
 </div>
-
-
-
 <div class= "row mt-5">
   <!--<div class="col-2">-->
 
@@ -24,19 +27,33 @@
   </div>
 
   <div class="col-3 mt-5">
-    <div class="row pl-5">
-      <h3>
-        現在地登録フォーム
-      </h3>
-    </div>
-    <div class="row mt-5">
+    <div class="row">
       <div class="col-auto">
-        <h4>
-          地点名
-        </h4>
+        <h3>
+          現在地登録フォーム
+        </h3>
       </div>
     </div>
     <%= form_with model: @place, url: places_path, method: :POST, local:true do |f| %>
+　    <div class="row mt-1">
+        <div class="col-auto">
+          <h4>
+            画像選択
+          </h4>
+        </div>
+      </div>
+      <div class="row mt-1">
+        <div class="col-11">
+          <%= f.attachment_field :image %>
+        </div>
+      </div>
+　    <div class="row mt-1">
+        <div class="col-auto">
+          <h4>
+            場所名
+          </h4>
+        </div>
+      </div>
       <div class="row">
         <div class="col-11">
           <%=f.text_field :place_name, class: "form-control",autofocus: true %>
@@ -45,7 +62,7 @@
       <div class="row mt-3">
         <div class="col-auto">
           <h4>
-            地点説明
+            場所説明
           </h4>
         </div>
       </div>
@@ -58,7 +75,7 @@
       <%= f.hidden_field :end_user_id, value: current_end_user.id %>
       <%= f.hidden_field :latitude, id: "latitude" %>
       <%= f.hidden_field :longitude, id: "longitude" %>
-      <%= f.hidden_field :address, value: "二戸" %>
+      <%= f.hidden_field :address, id: "add" %>
       <%= f.submit '現在地を登録する', class: 'btn btn-primary' %>
     <%end%>
   </div>
@@ -84,11 +101,27 @@
       //   map: map
       // });
       <% @group.places.each do |place| %>
+        map.setCenter( new google.maps.LatLng( <%= place.latitude %>, <%= place.longitude %> ) ) ;
+        var marker = null;
+        var infoWindow = null;
       　marker = new google.maps.Marker({
         　position:  {lat: <%= place.latitude %>, lng: <%= place.longitude %>},
         　map: map
     　　});
+        infoWindow = new google.maps.InfoWindow({
+          content: '<%= attachment_image_tag place, :image, format: 'jpeg', size: "250x170" %><br>地点名 : <%= place.place_name %><br>住所 : <%= place.address %><br>地点説明：<%= place.introduction %> <br>本数：<%= place.number %>本；<br>登録ユーザー : <%= place.end_user.name %><br><%= link_to place_path(place) do %><button type="button" class="btn btn-primary">詳細</button><%end%>'
+        });
+        infoWindowOpen(marker,infoWindow);
       <%end%>
+      function infoWindowOpen(marker,infoWindow){
+        marker.addListener('click', function(){
+          infoWindow.open(map, marker);
+        });
+      }
+
+      // marker.addListener('click', function(){
+      //     infoWindow.open(map, marker);
+      // });
     }
 
     function codeAddress(){
@@ -102,7 +135,14 @@
               position: results[0].geometry.location
           });
           const infoWindow = new google.maps.InfoWindow({
-            content: "hello"
+            content:'<form action="/places" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓">'
+              +'<input type="hidden" name="place[end_user_id]" id="place_end_user_id_in_info_window" value=' + document.getElementById('place_end_user_id').value + '>'
+              +'<input type="hidden" name="place[group_id]" id="place_gruop_id_in_info_window" value=' + document.getElementById('place_group_id').value + '>'
+              +'<input id="lat" type="hidden" name="place[latitude]" value=' + results[ 0 ].geometry.location.lat() + '>'
+              +'<input id="log" type="hidden" name="place[longitude]" value=' + results[ 0 ].geometry.location.lng() + '>'
+              +'<input id="ad" type="hidden" name="place[address]" value=' + document.getElementById('address').value + '>'
+              +'<input type="submit" name="commit" value="場所を登録する" class="btn btn-primary" data-disable-with="場所を登録する">'
+            +'</form>'
           });
           marker.addListener('click', function(){
             infoWindow.open(map, marker);
@@ -136,9 +176,73 @@
   		 	var accAlt = data.altitudeAccuracy ;
   			var heading = data.heading ;			//0=北,90=東,180=南,270=西
   			var speed = data.speed ;
+  			var Address ;
+
+        (function(){
+          // console.log("aaa");
+          var requestAjax = function(endpoint, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+              if (this.readyState==4 && this.status==200) {
+                callback(this.response);
+              }
+            };
+            xhr.responseType = 'json';
+            xhr.open('GET',endpoint,true);
+            xhr.send();
+          };
+
+        // 東京駅の緯度経度
+        var apiKey = '<%= ENV['API_KEY'] %>';
+        var requestURL = 'https://maps.googleapis.com/maps/api/geocode/json?language=ja&sensor=false';
+        requestURL += '&latlng=' + lat + ',' + lng;
+        requestURL += '&key=' + apiKey;
+        console.log(requestURL);
+        requestAjax(requestURL, function(response){
+          if (response.error_message) {
+            console.log(response.error_message);
+          } else {
+            Address = response.results[0]['formatted_address'];
+            // 住所は「日本、〒100-0005 東京都千代田区丸の内一丁目」の形式
+            console.log(Address);
+            // var data = formattedAddress.split(' ');
+            // console.log(data);
+            document.getElementById("add").value = Address;
+          }
+        });
+        })();
         document.getElementById("latitude").value = lat;
         document.getElementById("longitude").value = lng;
+        alert( "あなたの現在位置は、\n[" + lat + "," + lng + "]\nです。" ) ;
   		}
+  		// function( error )
+  		// {
+  		// 	// エラーコード(error.code)の番号
+  		// 	// 0:UNKNOWN_ERROR				原因不明のエラー
+  		// 	// 1:PERMISSION_DENIED			利用者が位置情報の取得を許可しなかった
+  		// 	// 2:POSITION_UNAVAILABLE		電波状況などで位置情報が取得できなかった
+  		// 	// 3:TIMEOUT					位置情報の取得に時間がかかり過ぎた…
+
+  		// 	// エラー番号に対応したメッセージ
+  		// 	var errorInfo = [
+  		// 		"原因不明のエラーが発生しました…。" ,
+  		// 		"位置情報の取得が許可されませんでした…。" ,
+  		// 		"電波状況などで位置情報が取得できませんでした…。" ,
+  		// 		"位置情報の取得に時間がかかり過ぎてタイムアウトしました…。"
+  		// 	] ;
+
+  		// 	// エラー番号
+  		// 	var errorNo = error.code ;
+
+  		// 	// エラーメッセージ
+  		// 	var errorMessage = "[エラー番号: " + errorNo + "]\n" + errorInfo[ errorNo ] ;
+
+  		// 	// アラート表示
+  		// 	alert( errorMessage ) ;
+
+  		// 	// HTMLに書き出し
+  		// 	document.getElementById("result").innerHTML = errorMessage;
+  		// } ,
     )
   }
   </script>
@@ -148,14 +252,52 @@
   <div class="form-group row mt-5">
    <div class="col-4 mx-auto">
      <%= form_with(model: @place, local: true) do |f| %>
-     　<%= f.hidden_field :latitude, id: "latitude" %>
-     　<%= f.hidden_field :longitude, id: "longitude" %>
+     　<%= f.hidden_field :latitude, id: "__latitude" %>
+     　<%= f.hidden_field :longitude, id: "__longitude" %>
        <%= f.submit '現在地を登録する', class: 'btn btn-primary btn-block' %>
      <%end%>
    </div>
   </div>
 
-
+<div class="row">
+  <div class="col-auto offset-2">
+    <h3>保存した場所</h3>
+  </div>
+</div>
+<div class="row mt-2">
+  <div class="col-8 mx-auto">
+    <table class="table table-bordered border-dark">
+      <thead>
+        <tr>
+          <th class="col-2">場所名</th>
+          <th class="col-2">本数</th>
+          <th class="col-5">場所説明</th>
+          <th class="col-2"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @group.places.each do |place| %>
+          <tr>
+            <td>
+              <%= attachment_image_tag place, :image, size: "30x20", format: 'jpeg' %>  <%= place.place_name%>
+            </td>
+            <td>
+              <%= place.number %>
+            </td>
+            <td>
+              <%= place.introduction %>
+            </td>
+            <td>
+              <%= link_to edit_place_path(place) do %>
+                <button type="button" class="btn btn-success">場所編集</button>
+              <%end%>
+            </td>
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+  </div>
+</div>
 <div class="row mt-5">
   <div class="col-8 mx-auto">
     <table class="table table-bordered border-dark">

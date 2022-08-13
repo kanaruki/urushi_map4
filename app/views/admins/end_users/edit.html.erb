@@ -1,0 +1,51 @@
+<% if @end_user.errors.any? %>
+  <%= @end_user.errors.count %>件のエラーが発生しました
+  <% @end_user.errors.full_messages.each do |message| %>
+    <%= message %>
+  <% end %>
+<% end %>
+<div class="row">
+  <div class="col-auto offset-2 mt-5">
+    <h2>会員編集</h2>
+  </div>
+</div>
+<%= form_with model: @end_user, url: admins_end_user_path(@end_user), method: :PATCH, local:true do |f| %>
+  <div class="row mt-5">
+    <div class="col-2 offset-3">
+      <h5>プロフィールアイコン</h5>
+    </div>
+    <div class="col-3">
+      <%= f.attachment_field :image %>
+      <%#= f.file_field :image %>
+    </div>
+  </div>
+  <div class="row mt-5">
+    <div class="col-2 offset-3">
+      <h5>ニックネーム</h5>
+    </div>
+    <div class="col-3">
+      <%= f.text_field :name,class: 'form-control',autofocus: true, autocomplete: "name" %>
+    </div>
+  </div>
+  <div class="row mt-5">
+    <div class="col-2 offset-3">
+      <h5>自己紹介</h5>
+    </div>
+    <div class="col-3">
+      <%= f.text_area :introduction,class: 'form-control',autofocus: true, autocomplete: "introduction" %>
+    </div>
+  </div>
+  <div class="row mt-5">
+    <div class="col-2 offset-3">
+      <h5>メールアドレス</h5>
+    </div>
+    <div class="col-3">
+      <%= f.text_field :email,class: 'form-control',autofocus: true, autocomplete: "email" %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-2 mx-auto mt-5">
+      <%= f.submit "マイページ変更", class: 'btn btn-primary btn-block' %>
+    </div>
+  </div>
+<%end%>

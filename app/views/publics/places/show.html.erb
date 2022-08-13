@@ -1,0 +1,55 @@
+<div class="row">
+  <div class="col-auto offset-2 mt-5">
+    <h2>場所詳細</h2>
+  </div>
+</div>
+<div class="row mt-5">
+  <div class="col-2 offset-3">
+    <h5>場所画像</h5>
+  </div>
+  <div class="col-3">
+    <%#= image_tag event.image %>
+    <%= attachment_image_tag @place, :image, size: "300x200", format: 'jpeg' %>
+    <%#= image_tag @end_user.image.thumb.url %>
+  </div>
+</div>
+<div class="row mt-5">
+  <div class="col-2 offset-3">
+    <h5>場所名</h5>
+  </div>
+  <div class="col-3">
+    <%= @place.place_name %>
+  </div>
+</div>
+<div class="row mt-5">
+  <div class="col-2 offset-3">
+    <h5>場所説明</h5>
+  </div>
+  <div class="col-3">
+    <%= @place.introduction %>
+  </div>
+</div>
+
+<div class="row mt-5">
+  <div class="col-2 offset-3">
+    <h5>本数</h5>
+  </div>
+  <div class="col-auto">
+    <%= @place.number %>
+  </div>
+  <div class="col-auto pl-0">
+    本
+  </div>
+</div>
+
+
+<div class="row mt-5">
+  <div class="col-2 offset-3">
+    <h5>場所編集</h5>
+  </div>
+  <div class="col-3">
+    <%= link_to edit_place_path(@place) do %>
+      <button type="button" class="btn btn-primary btn-block">場所編集</button>
+    <%end%>
+  </div>
+</div>

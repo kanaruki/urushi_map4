@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="col-auto offset-2 mt-5">
+    <h2>会員一覧</h2>
+  </div>
+</div>
+<div class="row mt-5">
+  <div class="col-8 mx-auto">
+    <table class="table table-bordered border-dark">
+      <thead>
+        <tr>
+          <th class="col-4">会員名</th>
+          <th class="col-5">会員紹介</th>
+          <th class="col-3"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @end_users.each do |end_user| %>
+          <tr>
+            <td>
+              <%= attachment_image_tag end_user, :image, size: "30x20", format: 'jpeg' %>  <%= end_user.name %>
+            </td>
+            <td>
+              <%= end_user.introduction %>
+            </td>
+            <td>
+              <div class="row">
+                <div class="col-auto mx-auto">
+                  <%= link_to admins_end_user_path(end_user) do %>
+                    <button type="button" class="btn btn-primary">会員詳細</button>
+                  <%end%>
+                </div>
+              </div>
+            </td>
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+  </div>
+</div>

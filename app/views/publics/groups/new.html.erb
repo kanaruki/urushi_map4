@@ -8,6 +8,9 @@
   <div class="col-auto offset-2 mt-5">
     <h2>グループ作成</h2>
   </div>
+  <div class="col-auto  mt-5">
+    <h5 class="text-red">グループ公開を公開するにチェックをすると<br>誰でも自由にグループに参加できるようになります。</h5>
+  </div>
 </div>
 <%= form_with model: @group, url: groups_path(@group), method: :POST, local:true do |f| %>
 

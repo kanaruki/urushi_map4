@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="col-auto offset-2 mt-5">
+    <h2>グループ一覧</h2>
+  </div>
+</div>
+<div class="row mt-5">
+  <div class="col-8 mx-auto">
+    <table class="table table-bordered border-dark">
+      <thead>
+        <tr>
+          <th class="col-4">会員名</th>
+          <th class="col-5">会員紹介</th>
+          <th class="col-3"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @groups.each do |group| %>
+          <tr>
+            <td>
+              <%= attachment_image_tag group, :image, size: "30x20", format: 'jpeg' %>  <%= group.name %>
+            </td>
+            <td>
+              <%= group.introduction %>
+            </td>
+            <td>
+              <div class="row">
+                <div class="col-auto mx-auto">
+                  <%= link_to admins_group_path(group) do %>
+                    <button type="button" class="btn btn-primary">グループ詳細</button>
+                  <%end%>
+                </div>
+              </div>
+            </td>
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+  </div>
+</div>

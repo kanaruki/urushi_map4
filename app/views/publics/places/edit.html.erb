@@ -1,0 +1,66 @@
+<% if @place.errors.any? %>
+  <%= @place.errors.count %>件のエラーが発生しました
+  <% @place.errors.full_messages.each do |message| %>
+    <%= message %>
+  <% end %>
+<% end %>
+<div class="row">
+  <div class="col-auto offset-2 mt-5">
+    <h2>場所編集</h2>
+  </div>
+  <div class="col-auto mt-5">
+    <h5 class="text-red">本数は半角数字のみで入力してください<br>それ以外を入力すると値が0になります。</h5>
+  </div>
+</div>
+<%= form_with model: @place, url: place_path(@place), method: :PATCH, local:true do |f| %>
+  <div class="row mt-5">
+    <div class="col-2 offset-3">
+      <h5>場所画像</h5>
+    </div>
+    <div class="col-3">
+      <%#= image_tag event.image %>
+      <%= f.attachment_field :image %>
+      <%#= image_tag @end_user.image.thumb.url %>
+    </div>
+  </div>
+  <div class="row mt-5">
+    <div class="col-2 offset-3">
+      <h5>場所名</h5>
+    </div>
+    <div class="col-3">
+      <%= f.text_field :place_name,class: 'form-control',autofocus: true, autocomplete: "place_name" %>
+    </div>
+  </div>
+  <div class="row mt-5">
+    <div class="col-2 offset-3">
+      <h5>場所説明</h5>
+    </div>
+    <div class="col-3">
+      <%= f.text_area :introduction,class: 'form-control', autocomplete: "introduction" %>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-2 offset-3">
+      <h5>本数</h5>
+    </div>
+    <div class="col-3">
+       <%= f.text_field :number,class: 'form-control', autocomplete: "number" %>
+    </div>
+    <div class="col-auto mt-2">
+      本
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-2 mx-auto mt-5">
+　　　<%= f.submit "変更", class: 'btn btn-primary btn-block' %>
+    </div>
+  </div>
+<%end%>
+<div class="row">
+  <div class="col-2 mx-auto mt-5">
+    <%= link_to place_path(@place), method: :delete, data: {confirm: "本当に削除しますか？"} do %>
+      <button type="button" class="btn btn-danger btn-block">場所を削除する</button>
+    <%end%>
+  </div>
+</div>

@@ -8,6 +8,8 @@ class CreatePlaces < ActiveRecord::Migration[5.2]
       t.text :introduction, null:false, default:""
       t.float :latitude, null: false
       t.float :longitude, null: false
+      t.string :image_id
+      t.integer :number, default: 0
       t.timestamps
     end
   end
