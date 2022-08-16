@@ -1,2 +1,312 @@
-<h1>Admins::Groups#show</h1>
-<p>Find me in app/views/admins/groups/show.html.erb</p>
+<div class="row">
+  <div class="col-auto offset-2 mt-5">
+    <h2>管理者<%= @group.name %></h2>
+  </div>
+</div>
+<div class= "row mt-5">
+  <div class="col-8 offset-1">
+    <div class="row">
+      <div class="col-4">
+        <h3>マップ</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+      </div>
+      <div class="col-auto">
+        <%#= form_with model: @place, url: places_path, method: :POST, local:true do |f| %>
+          <%#= f.text_field :latitude, id: "idoInput2", class:"" %>
+          <%#= f.text_field :longitude, id: "keidoInput2", class:"" %>
+          <%#= f.text_field :place_name, id: "", class:"" %>
+          <%#= f.hidden_field :group_id, value: @group.id %>
+          <%#= f.hidden_field :end_user_id, value: current_end_user.id %>
+          <%#= f.hidden_field :address, id: "addressOutput" %>
+          <%#= f.submit '緯度と経度で登録する', class: 'btn btn-primary' %>
+        <%#end%>
+      </div>
+    </div>
+    <div class="map">
+      <div id="map">
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<div type="text/javascript">
+  <script>
+    let map
+    let geocoder
+    // 下の1行を追加
+    const display = document.getElementById('display')
+    function initMap(){
+       geocoder = new google.maps.Geocoder()
+       map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 40.271104, lng: 141.305063},
+        zoom: 10,
+      });
+      <% @group.places.each do |place| %>
+        map.setCenter( new google.maps.LatLng( <%= place.latitude %>, <%= place.longitude %> ) ) ;
+        var marker = null;
+        var infoWindow = null;
+      　marker = new google.maps.Marker({
+        　position:  {lat: <%= place.latitude %>, lng: <%= place.longitude %>},
+        　map: map
+    　　});
+
+        infoWindow = new google.maps.InfoWindow({
+          content: '<%= attachment_image_tag place, :image, format: 'jpeg', size: "250x170" %><br>地点名 : <%= place.place_name %><br>住所 : <%= place.address %><br>地点説明：<%= place.introduction %> <br>本数：<%= place.number %>本；<br>登録ユーザー : <%= place.end_user.name %><br>'
+        });
+        infoWindowOpen(marker,infoWindow);
+      <%end%>
+      function infoWindowOpen(marker,infoWindow){
+        marker.addListener('click', function(){
+          infoWindow.open(map, marker);
+        });
+      }
+    }
+    function codeAddress(){
+      var geocoder = new google.maps.Geocoder();
+
+      let inputAddress = document.getElementById('address').value;
+
+      geocoder.geocode( { 'address': inputAddress}, function(results, status) {
+        if (status == 'OK') {
+          map.setCenter(results[0].geometry.location);
+          const marker = new google.maps.Marker({
+              map: map,
+              position: results[0].geometry.location
+          });
+          const infoWindow = new google.maps.InfoWindow({
+            content:'<form action="/places" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓">'
+              +'<input type="hidden" name="place[end_user_id]" id="place_end_user_id_in_info_window" value=' + document.getElementById('place_end_user_id').value + '>'
+              +'<input type="hidden" name="place[group_id]" id="place_gruop_id_in_info_window" value=' + document.getElementById('place_group_id').value + '>'
+              +'<input id="lat_address" type="hidden" name="place[latitude]" value=' + results[ 0 ].geometry.location.lat() + '>'
+              +'<input id="lng_address" type="hidden" name="place[longitude]" value=' + results[ 0 ].geometry.location.lng() + '>'
+              +'<input id="address_address" type="hidden" name="place[address]" value=' + document.getElementById('address').value + '>'
+              +'<input type="submit" name="commit" value="場所を登録する" class="btn btn-primary" data-disable-with="場所を登録する">'
+            +'</form>'
+          });
+          marker.addListener('click', function(){
+            infoWindow.open(map, marker);
+          });
+          display.textContent = "検索結果：" + results[ 0 ].geometry.location
+        } else {
+          alert('該当する結果がありませんでした：' + status);
+        }
+      });
+    }
+    function getAddress(){
+      //入力した緯度・経度を取得します。
+      var idoInput = document.getElementById('idoInput').value;
+      var keidoInput = document.getElementById('keidoInput').value;
+      console.log(latLngInput)
+      //緯度・経度をLatLngクラスに変換します。
+      var latLngInput = new google.maps.LatLng(idoInput, keidoInput);
+      //Google Maps APIのジオコーダを使います。
+      var geocoder = new google.maps.Geocoder();
+      //ジオコーダのgeocodeを実行します。
+      //第１引数のリクエストパラメータにlatLngプロパティを設定します。
+      //第２引数はコールバック関数です。取得結果を処理します。
+      geocoder.geocode(
+        {
+          latLng: latLngInput
+        },
+        function(results, status) {
+          var address = "";
+          if (status == google.maps.GeocoderStatus.OK) {
+          //取得が成功した場合
+            //住所を取得します。
+            address = results[0].formatted_address;
+            console.log(address);
+          } else if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
+            alert("住所が見つかりませんでした。");
+          } else if (status == google.maps.GeocoderStatus.ERROR) {
+            alert("サーバ接続に失敗しました。");
+          } else if (status == google.maps.GeocoderStatus.INVALID_REQUEST) {
+            alert("リクエストが無効でした。");
+          } else if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+            alert("リクエストの制限回数を超えました。");
+          } else if (status == google.maps.GeocoderStatus.REQUEST_DENIED) {
+            alert("サービスが使えない状態でした。");
+          } else if (status == google.maps.GeocoderStatus.UNKNOWN_ERROR) {
+            alert("原因不明のエラーが発生しました。");
+          }
+          //住所の結果表示をします。
+          document.getElementById('addressOutput').value = address;
+        });
+    }
+  // ユーザーの端末がGeoLocation APIに対応しているかの判定
+  // 対応している場合
+  if( navigator.geolocation )
+  {
+  	// 現在地を取得
+  	navigator.geolocation.getCurrentPosition(
+  		// [第1引数] 取得に成功した場合の関数
+  		function( position )
+  		{
+  			// 取得したデータの整理
+  			var data = position.coords ;
+  			// データの整理
+  			var lat = data.latitude ;
+  			var lng = data.longitude ;
+  			var alt = data.altitude ;
+  		 	var accLatlng = data.accuracy ;
+  		 	var accAlt = data.altitudeAccuracy ;
+  			var heading = data.heading ;			//0=北,90=東,180=南,270=西
+  			var speed = data.speed ;
+  			var Address ;
+  		// 	var link = `https://www.google.com/maps/dir/?api=1&origin=${Lat,Lng} &destination=<%= "{place.latitude},{place.longitude}" %>;`
+        (function(){
+          // console.log("aaa");
+          var requestAjax = function(endpoint, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+              if (this.readyState==4 && this.status==200) {
+                callback(this.response);
+              }
+            };
+            xhr.responseType = 'json';
+            xhr.open('GET',endpoint,true);
+            xhr.send();
+          };
+          // 東京駅の緯度経度
+          var apiKey = '<%= ENV['API_KEY'] %>';
+          var requestURL = 'https://maps.googleapis.com/maps/api/geocode/json?language=ja&sensor=false';
+          requestURL += '&latlng=' + lat + ',' + lng;
+          requestURL += '&key=' + apiKey;
+          console.log(requestURL);
+          requestAjax(requestURL, function(response){
+            if (response.error_message) {
+              console.log(response.error_message);
+            } else {
+              Address = response.results[0]['formatted_address'];
+              // 住所は「日本、〒100-0005 東京都千代田区丸の内一丁目」の形式
+              console.log(Address);
+              // var data = formattedAddress.split(' ');
+              // console.log(data);
+              document.getElementById("add").value = Address;
+            }
+          });
+        })();
+        document.getElementById("latitude").value = lat;
+        document.getElementById("longitude").value = lng;
+        alert( "あなたの現在位置は、\n[" + lat + "," + lng + "]\nです。" ) ;
+  		},
+  		function( error )
+  		{
+  			// エラーコード(error.code)の番号
+  			// 0:UNKNOWN_ERROR				原因不明のエラー
+  			// 1:PERMISSION_DENIED			利用者が位置情報の取得を許可しなかった
+  			// 2:POSITION_UNAVAILABLE		電波状況などで位置情報が取得できなかった
+  			// 3:TIMEOUT					位置情報の取得に時間がかかり過ぎた…
+  			// エラー番号に対応したメッセージ
+  			var errorInfo = [
+  				"原因不明のエラーが発生しました…。" ,
+  				"位置情報の取得が許可されませんでした…。" ,
+  				"電波状況などで位置情報が取得できませんでした…。" ,
+  				"位置情報の取得に時間がかかり過ぎてタイムアウトしました…。"
+  			] ;
+  			// エラー番号
+  			var errorNo = error.code ;
+
+  			// エラーメッセージ
+  			var errorMessage = "[エラー番号: " + errorNo + "]\n" + errorInfo[ errorNo ] ;
+
+  			// アラート表示
+  			alert( errorMessage ) ;
+
+  			// HTMLに書き出し
+  			document.getElementById("result").innerHTML = errorMessage;
+  		} ,
+
+  		// [第3引数] オプション
+  		{
+  			"enableHighAccuracy": false,
+  			"timeout": 8000,
+  			"maximumAge": 2000,
+    	}
+    	) ;
+  }
+    // 対応していない場合
+  else
+  {
+    	// エラーメッセージ
+    	var errorMessage = "お使いの端末は、GeoLacation APIに対応していません。" ;
+
+    	// アラート表示
+    	alert( errorMessage ) ;
+
+    	// HTMLに書き出し
+    	document.getElementById( 'result' ).innerHTML = errorMessage ;
+  }
+  //   )
+  // }
+  </script>
+　<script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV['API_KEY'] %>&callback=initMap" async defer></script>
+</div>
+
+<div class="row">
+  <div class="col-auto offset-2">
+    <h3>保存した場所</h3>
+  </div>
+</div>
+<div class="row mt-2">
+  <div class="col-8 mx-auto">
+    <table class="table table-bordered border-dark">
+      <thead>
+        <tr>
+          <th class="col-2">場所名</th>
+          <th class="col-1">本数</th>
+          <th class="col-5">場所説明</th>
+          <th class="col-4"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @group.places.each do |place| %>
+          <tr>
+            <td>
+              <%= attachment_image_tag place, :image, size: "30x20", format: 'jpeg' %>  <%= place.place_name%>
+            </td>
+            <td>
+              <%= place.number %>
+            </td>
+            <td>
+              <%= place.introduction %>
+            </td>
+            <td>
+            </td>
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="row mt-5">
+  <div class="col-8 mx-auto">
+    <table class="table table-bordered border-dark">
+      <thead>
+        <tr>
+          <th class="col-4">所属メンバー</th>
+          <th class="col-5">メンバー紹介</th>
+          <th class="col-3"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @group.end_users.each do |group_user| %>
+          <tr>
+            <td>
+              <%= attachment_image_tag group_user, :image, size: "30x20", format: 'jpeg' %>  <%= group_user.name%>
+            </td>
+            <td>
+              <%= group_user.introduction %>
+            </td>
+            <td>
+            </td>
+          </tr>
+        <%end%>
+      </tbody>
+    </table>
+  </div>
+</div>

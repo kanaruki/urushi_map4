@@ -5,8 +5,6 @@ class Publics::GroupsController < ApplicationController
   def show
     @group = Group.find(params[:id])
     @place = Place.new
-    # @place_1 = @group.places.first
-    # @place_2 = @group.places.second
   end
 
   def index
@@ -29,9 +27,9 @@ class Publics::GroupsController < ApplicationController
   end
 
   def add_user
-    @group = Group.find(params[:group_id])
-    end_user = EndUser.find(params[:end_user_id])
-    @group.users << end_user
+    @group = Group.find(params[:group_user][:group_id])
+    end_user = EndUser.find(params[:group_user][:end_user_id])
+    @group.end_users << end_user
     redirect_to group_path(@group), notice: "ユーザーを追加しました。"
   end
 

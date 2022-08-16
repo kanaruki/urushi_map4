@@ -4,7 +4,7 @@
     <title>UrushiMap2</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
+    <meta name="viewport" content="width=device-height">
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
   </head>
@@ -12,52 +12,54 @@
   <body>
     <header>
       <div class="row height_100">
-        <div class="col-md-auto my-auto ml-auto">
+        <div class="col-auto my-auto ml-auto">
           <%= link_to root_path do %>
             <h2>漆マップ</h2>
           <%end%>
         </div>
         <% if end_user_signed_in? %>
-          <div class="col-md-auto my-auto ml-auto">
+          <div class="col-auto my-auto ml-auto">
             <%= link_to new_group_path do %>
               <button type="button" class="btn btn-secondary">グループ作成</button>
             <%end%>
           </div>
-          <div class="col-md-auto my-auto">
+          <div class="col-auto my-auto">
             <%= link_to end_users_mypage_path do %>
               <button type="button" class="btn btn-secondary">マイページ編集</button>
             <%end%>
           </div>
 
-          <div class="col-md-auto my-auto">
+          <div class="col-auto my-auto">
             <%= link_to groups_path do %>
               <button type="button" class="btn btn-secondary">グループ一覧</button>
             <%end%>
           </div>
-          <div class="col-md-auto my-auto">
+          <div class="col-auto my-auto">
             <%= link_to destroy_end_user_session_path, method: :delete do %>
               <button type="button" class="btn btn-secondary">ログアウト</button>
             <%end%>
           </div>
 
-          <div class="col-md-auto my-auto mr-5">
+          <div class="col-auto my-auto mr-5">
             <button type="button" class="btn btn-secondary">未定</button>
           </div>
         <%elsif admin_signed_in? %>
-          <div class="col-md-auto my-auto ml-auto">
+          <div class="col-auto my-auto ml-auto">
             <%= link_to  admins_end_users_path do %>
               <button type="button" class="btn btn-secondary">会員一覧</button>
             <%end%>
           </div>
 
-         <div class="col-md-auto my-auto">
+         <div class="col-auto my-auto">
             <%= link_to  admins_groups_path do %>
               <button type="button" class="btn btn-secondary">グループ一覧</button>
             <%end%>
           </div>
 
           <div class="col-auto my-auto mr-5">
-            <%= link_to "ログアウト", destroy_admin_session_path, method: :delete, class: "btn btn-secondary btn-block" %>
+            <%= link_to destroy_admin_session_path, method: :delete do %>
+               <button type="button" class="btn btn-secondary">ログアウト</button>
+            <%end%>
           </div>
         <%else%>
           <div class="col-auto my-auto ml-auto">
@@ -66,9 +68,10 @@
             <%end%>
           </div>
           <div class="col-auto my-auto">
-            <%= link_to "ログイン", new_end_user_session_path, class: "btn btn-secondary btn-block" %>
+            <%= link_to new_end_user_session_path do %>
+              <button type="button" class="btn btn-secondary">ログイン</button>
+            <%end%>
           </div>
-
           <div class="col-auto my-auto">
             <button type="button" class="btn btn-outline-success">未定</button>
           </div>

@@ -37,7 +37,18 @@
       <%= f.text_field :email,class: 'form-control',autofocus: true, autocomplete: "email" %>
     </div>
   </div>
-  <div class="row">
+
+  <div class="row mt-5">
+    <div class="col-2 offset-3">
+      <h5>退会</h5>
+    </div>
+    <div class="col-3">
+      <%= link_to end_users_confirm_path do %>
+         <button type="button" class="btn btn-danger btn-block">退会</button>
+      <%end%>
+    </div>
+  </div>
+  <div class="row pb-5">
     <div class="col-2 mx-auto mt-5">
       <%= f.submit "マイページ変更", class: 'btn btn-primary btn-block' %>
     </div>

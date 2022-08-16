@@ -82,8 +82,8 @@ ActiveRecord::Schema.define(version: 2022_08_08_053209) do
   create_table "places", force: :cascade do |t|
     t.integer "end_user_id"
     t.integer "group_id"
-    t.string "place_name", null: false
-    t.string "address", null: false
+    t.string "place_name", default: "", null: false
+    t.string "address", default: "", null: false
     t.text "introduction", default: "", null: false
     t.float "latitude", null: false
     t.float "longitude", null: false

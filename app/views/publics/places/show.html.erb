@@ -8,9 +8,15 @@
     <h5>場所画像</h5>
   </div>
   <div class="col-3">
-    <%#= image_tag event.image %>
     <%= attachment_image_tag @place, :image, size: "300x200", format: 'jpeg' %>
-    <%#= image_tag @end_user.image.thumb.url %>
+  </div>
+</div>
+<div class="row mt-5">
+  <div class="col-2 offset-3">
+    <h5>登録者名</h5>
+  </div>
+  <div class="col-3">
+    <%= @place.end_user.name %>
   </div>
 </div>
 <div class="row mt-5">
@@ -29,6 +35,26 @@
     <%= @place.introduction %>
   </div>
 </div>
+<div class="row mt-5">
+  <div class="col-2 offset-3">
+    <h5>住所</h5>
+  </div>
+  <div class="col-auto">
+    <%= @place.address %>
+  </div>
+</div>
+<div class="row mt-5">
+  <div class="col-2 offset-3">
+    <h5>緯度経度</h5>
+  </div>
+  <div class="col-auto">
+    <%= @place.latitude %>,
+  </div>
+  <div class="col-auto ml-1">
+    <%= @place.longitude %>
+  </div>
+</div>
+
 
 <div class="row mt-5">
   <div class="col-2 offset-3">
@@ -50,6 +76,11 @@
   <div class="col-3">
     <%= link_to edit_place_path(@place) do %>
       <button type="button" class="btn btn-primary btn-block">場所編集</button>
+    <%end%>
+  </div>
+  <div class="col-3">
+    <%= link_to group_path(@group) do %>
+      <button type="button" class="btn btn-success btn-block">グループに戻る</button>
     <%end%>
   </div>
 </div>

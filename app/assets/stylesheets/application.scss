@@ -58,7 +58,7 @@
 }
 
 .btn-secondary {
-    color: light; //ボタンのテキストの色
+  color: light; //ボタンのテキストの色
 }
 
 .text-red {
@@ -78,6 +78,19 @@
     background-color: alert_orange;
   }
 }
- // .menu {
- //  // background-image: image-url('wood.jpeg');
- // }
+
+ .gayousi {
+  background-image: image-url('gayousi.jpeg');
+  background-size: 100%, auto;
+ }
+
+ footer {
+  background-color: black;
+   height: 180px;
+   width: 100%;
+ }
+
+.marginbottom {
+ margin-bottom: 300px;
+}
+

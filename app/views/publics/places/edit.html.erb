@@ -28,7 +28,7 @@
       <h5>場所名</h5>
     </div>
     <div class="col-3">
-      <%= f.text_field :place_name,class: 'form-control',autofocus: true, autocomplete: "place_name" %>
+      <%= f.text_field :place_name,class: 'form-control',autofocus: true, autocomplete: "place_name", placeholder: "場所名を変える時だけ入力してください" %>
     </div>
   </div>
   <div class="row mt-5">
@@ -36,7 +36,26 @@
       <h5>場所説明</h5>
     </div>
     <div class="col-3">
-      <%= f.text_area :introduction,class: 'form-control', autocomplete: "introduction" %>
+      <%= f.text_area :introduction,class: 'form-control', autocomplete: "introduction", placeholder: "場所説明を変える時だけ入力してください" %>
+    </div>
+  </div>
+  <div class="row mt-5">
+    <div class="col-2 offset-3">
+      <h5>住所</h5>
+    </div>
+    <div class="col-3">
+      <%= f.text_field :addres,class: 'form-control',autofocus: true, autocomplete: "address", placeholder: "住所を変える時だけ入力してください" %>
+    </div>
+  </div>
+  <div class="row mt-5">
+    <div class="col-2 offset-3">
+      <h5>緯度経度</h5>
+    </div>
+    <div class="col-auto">
+      <%= f.text_field :latitude,class: 'form-control',autofocus: true, autocomplete: "latitude" %>
+    </div>
+      <div class="col-3">
+      <%= f.text_field :longitude,class: 'form-control',autofocus: true, autocomplete: "longitude" %>
     </div>
   </div>
 
@@ -52,15 +71,21 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-2 mx-auto mt-5">
+    <div class="col-2 offset-5 mt-5">
 　　　<%= f.submit "変更", class: 'btn btn-primary btn-block' %>
+    </div>
+    <div class="col-2 mt-auto">
+      <%= link_to place_path(@place) do%>
+        <button type="button" class="btn btn-success btn-block">場所詳細</button>
+      <%end%>
+    </div>
+    <div class="col-2 mt-auto">
+      <%= link_to place_path(@place), method: :delete, data: {confirm: "本当に削除しますか？"} do %>
+        <button type="button" class="btn btn-danger btn-block">場所を削除する</button>
+      <%end%>
     </div>
   </div>
 <%end%>
 <div class="row">
-  <div class="col-2 mx-auto mt-5">
-    <%= link_to place_path(@place), method: :delete, data: {confirm: "本当に削除しますか？"} do %>
-      <button type="button" class="btn btn-danger btn-block">場所を削除する</button>
-    <%end%>
-  </div>
+
 </div>

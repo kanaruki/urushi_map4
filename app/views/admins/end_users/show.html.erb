@@ -8,9 +8,11 @@
     <h5>プロフィールアイコン</h5>
   </div>
   <div class="col-3">
-    <%#= image_tag event.image %>
-    <%= attachment_image_tag @end_user, :image, size: "300x200", format: 'jpeg' %>
-    <%#= image_tag @end_user.image.thumb.url %>
+    <% if @end_user.image.blank? %>
+    　<%= image_tag '/images/default.png' %>
+    <%else%>
+      <%= attachment_image_tag @end_user, :image, size: "300x200", format: 'jpeg' %>
+    <% end %>
   </div>
 </div>
 <div class="row mt-5">
@@ -38,8 +40,20 @@
     <%= @end_user.email %>
   </div>
 </div>
-
 <div class="row mt-5">
+  <div class="col-2 offset-3">
+    <h5>会員ステータス</h5>
+  </div>
+  <div class="col-3">
+    <% if @end_user.is_deleted == false then %>
+      <h6 class="my-auto text-success">有効</h6>
+    <%else%>
+      <h6 class="my-auto text-dark-50">無効</h6>
+    <%end%>
+   </div>
+</div>
+
+<div class="row mt-5 pb-5">
   <div class="col-2 offset-3">
     <h5>マイページ編集</h5>
   </div>
