@@ -75,3 +75,6 @@ gem 'carrierwave'
 gem 'mini_magick'
 gem 'image_processing', '~> 1.2'
 gem 'rails-i18n'
+group :production do
+  gem 'mysql2'
+end
