@@ -15,12 +15,6 @@
       <div class="col-4">
         <h3>マップ</h3>
       </div>
-      <div class="col-2">
-        <h5>緯度</h5>
-      </div>
-      <div class="col-auto ml-4">
-        <h5>経度</h5>
-      </div>
     </div>
     <div class="row">
       <div class="col-4">
@@ -30,9 +24,8 @@
       </div>
       <div class="col-auto">
         <%= form_with model: @place, url: places_path, method: :POST, local:true do |f| %>
-          <%= f.text_field :latitude, id: "idoInput2", class:"" %>
-          <%= f.text_field :longitude, id: "keidoInput2", class:"" %>
-          <%#= f.text_field :place_name, id: "", class:"" %>
+          <%= f.text_field :latitude, placeholder: "緯度" %>
+          <%= f.text_field :longitude, placeholder: "経度" %>
           <%= f.hidden_field :group_id, value: @group.id %>
           <%= f.hidden_field :end_user_id, value: current_end_user.id %>
           <%= f.hidden_field :address, id: "addressOutput" %>
@@ -183,9 +176,7 @@
   			var heading = data.heading ;			//0=北,90=東,180=南,270=西
   			var speed = data.speed ;
   			var Address ;
-  		// 	var link = `https://www.google.com/maps/dir/?api=1&origin=${Lat,Lng} &destination=<%= "{place.latitude},{place.longitude}" %>;`
         (function(){
-          // console.log("aaa");
           var requestAjax = function(endpoint, callback) {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function(){

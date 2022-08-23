@@ -11,11 +11,15 @@ class Publics::SessionsController < Devise::SessionsController
 
   # POST /resource/sign_in
   def create
-    test = EndUser.where(email: user_params[:email])
-    if test[0][:is_deleted] == false
+    test = EndUser.where(email: end_user_params[:email])
+    if end_user_params[:email].blank?
+      redirect_to new_end_user_session_path, notice: '登録してあるメールアドレスを入力してください'
+    elsif end_user_params[:password].blank?
+      redirect_to new_end_user_session_path, notice: '登録してあるパスワードを入力してください'
+    elsif test[0][:is_deleted] == false
       super
     else
-      redirect_to new_end_user_session_path
+      redirect_to new_end_user_session_path, notice: '退会したアカウントではログインできません'
     end
   end
 
@@ -30,7 +34,7 @@ class Publics::SessionsController < Devise::SessionsController
 
   # protected
   private
-    def user_params
+    def end_user_params
       params.require(:end_user).permit(:email,:password)
     end
 

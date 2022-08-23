@@ -13,11 +13,13 @@
     </h5>
   </div>
 </div>
-<div class="row  justify-content-md-center mt-5">
+<div class="row  justify-content-md-center mt-5 marginbottom">
   <div class="col-2">
-    <%= link_to "退会しない", end_users_mypage_path, class: "btn btn-block btn-primary" %>
+    <%= link_to end_users_mypage_path do %>
+      <button type="button" class="btn btn-primary btn-block">退会しない</button>
+    <%end%>
   </div>
   <div class="col-2">
-    <%= link_to "退会する", end_users_withdrawal_path, class: "btn btn-block btn-danger",data: {confirm: "退会しますか？"} %>
+    <%= link_to "退会する",end_users_withdrawal_path, class: "btn btn-block btn-danger", method: :PATCH, data: {confirm: "退会しますか？"} %>
   </div>
 </div>

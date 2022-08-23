@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  # namespace :publics do
-  # end
   devise_for :admins,controllers: {
   sessions:      'admins/sessions',
   passwords:     'admins/passwords',
@@ -25,9 +23,9 @@ Rails.application.routes.draw do
     # create 'customers/customers/infomation' => 'customers#update'
   end
 
-   namespace :admins do
-     resources :end_users, only: [:index,:show,:edit,:update]
-     resources :groups, only: [:index,:show]
-   end
+  namespace :admins do
+    resources :end_users, only: [:index,:show,:edit,:update]
+    resources :groups, only: [:index,:show]
+  end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

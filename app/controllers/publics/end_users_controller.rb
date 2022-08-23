@@ -23,8 +23,6 @@ class Publics::EndUsersController < ApplicationController
     redirect_to root_path
   end
 
-
-
   private
 
   def end_user_params
