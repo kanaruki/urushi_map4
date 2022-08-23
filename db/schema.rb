@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 2022_08_06_050538) do
     t.integer "group_id"
     t.string "place_name", default: "", null: false
     t.string "address", default: "", null: false
-    t.text "introduction", default: "", null: false
+    t.text "introduction"
     t.float "latitude", null: false
     t.float "longitude", null: false
     t.string "image_id"

@@ -5,7 +5,7 @@ class CreatePlaces < ActiveRecord::Migration[5.2]
       t.references  :group, index: true, foreign_key: true
       t.string :place_name, null: false, default:""
       t.string :address, null: false, default:""
-      t.text :introduction, null:false, default:""
+      t.text :introduction
       t.float :latitude, null: false
       t.float :longitude, null: false
       t.string :image_id
