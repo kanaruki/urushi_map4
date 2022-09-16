@@ -3,21 +3,10 @@ class Publics::PlacesController < ApplicationController
   def create
     @group = Group.find(params[:place][:group_id])
     @place = Place.new(place_params)
-    strs = @place.introduction
-    if( strs.include?("\n") ) then
-      flash.now[:notice] = '地点説明に\nを含む文章を入れないでください。'
-      render "publics/groups/show"
-    elseif( strs.include?("\r") )
-      flash.now[:notice] = '地点説明に\rを含む文章を入れないでください。'
-    elseif( strs.include?("\r\n") )
-      flash.now[:notice] = '地点説明に\r\nを含む文章を入れないでください。'
-      render "publics/groups/show"
+    if @place.save
+      redirect_to group_path(@group)
     else
-      if @place.save
-        redirect_to group_path(@group)
-      else
-        render "publics/groups/show"
-      end
+      render "publics/groups/show"
     end
   end
 

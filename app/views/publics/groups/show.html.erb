@@ -332,6 +332,9 @@
               <%= group_user.introduction %>
             </td>
             <td>
+              <% if group_user == current_end_user %>
+                <%= link_to "グループ退会",group_user_path(@group), class: "btn btn-block btn-danger", method: :DELETE, data: {confirm: "退会しますか？"} %>
+              <%end%>
             </td>
           </tr>
         <%end%>

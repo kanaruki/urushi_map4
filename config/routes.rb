@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     resources :groups, only: [:new,:index,:show,:edit,:create]
     post 'groups/add_user' => 'groups#add_user'
     get 'end_users/confirm' => 'end_users#confirm'
+    resources :group_users, only:[:destroy]
     # create 'customers/customers/infomation' => 'customers#update'
   end
 

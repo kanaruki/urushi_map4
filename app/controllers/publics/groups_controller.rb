@@ -17,7 +17,6 @@ class Publics::GroupsController < ApplicationController
 
   def create
     @group = Group.new(group_params)
-    # byebug
     if @group.save
        @group.end_users << current_end_user
       redirect_to group_path(@group), notice: 'グループを作成しました'
@@ -29,8 +28,12 @@ class Publics::GroupsController < ApplicationController
   def add_user
     @group = Group.find(params[:group_user][:group_id])
     end_user = EndUser.find(params[:group_user][:end_user_id])
-    @group.end_users << end_user
-    redirect_to group_path(@group), notice: "ユーザーを追加しました。"
+    if @group.end_users.include?(current_end_user)
+      redirect_to groups_path, notice: '選択したグループはすでに参加しています'
+    else
+      @group.end_users << end_user
+      redirect_to group_path(@group), notice: "ユーザーを追加しました。"
+    end
   end
 
   private
